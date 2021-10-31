@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Vue CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+
+    <div id="root">
+        <word-relay start-word="유익병"></word-relay>
+        <word-relay start-word="라이덴"></word-relay>
+        <word-relay start-word="맹꽁이"></word-relay>
+    </div>
+
+    <script>
+        // 전역 컴포넌트
+        Vue.component("word-relay", {
+            template: `
+            <div>
+                <div>{{prevWord}}</div>
+                <form v-on:submit="onSubmitForm">
+                    <input type="text" v-model="nextWord" ref="inputString">
+                    <button type="submit">입력!</button>
+                </form>
+                <div>{{result}}</div>
+            </div>
+            `,
+            props: ["startWord"],
+            data() {
+                return {
+                    prevWord: this.startWord,
+                    nextWord: "",
+                    result: "",
+                };
+            },
+            // 데이터가 묶이는 것이 아니라 따로 기능해야 하기 때문에 Vue 인스턴스와 형태가 다름.
+            // data: {
+            //     prevWord: "초밥",
+            //     nextWord: "",
+            //     result: "",
+            // },
+            methods: {
+                onSubmitForm(e) {
+                    e.preventDefault();
+                    if(this.nextWord.length < 2) {
+                        this.result = "2글자 이상의 단어를 입력하세요.";
+                    } else {
+                        // if(this.prevWord.charAt(this.prevWord.length-1)==this.nextWord.charAt(0)) {
+                        if(this.prevWord[this.prevWord.length-1] == this.nextWord[0]) {
+                            this.result = "정답";
+                            this.prevWord = this.nextWord;
+                        } else {
+                            this.result = "땡!";
+                        }
+                    }
+                    this.nextWord = "";
+                    this.$refs.inputString.focus();
+
+                }
+            },
+        });
+    </script>
+
+    <script>
+        const app = new Vue({
+            el: "#root",
+            // data: {
+            //     prevWord: "초밥",
+            //     nextWord: "",
+            //     result: "",
+            // },
+            // methods: {
+            //     onSubmitForm(e) {
+            //         e.preventDefault();
+            //         if(this.nextWord.length < 2) {
+            //             this.result = "2글자 이상의 단어를 입력하세요.";
+            //         } else {
+            //             // if(this.prevWord.charAt(this.prevWord.length-1)==this.nextWord.charAt(0)) {
+            //             if(this.prevWord[this.prevWord.length-1] == this.nextWord[0]) {
+            //                 this.result = "정답";
+            //                 this.prevWord = this.nextWord;
+            //             } else {
+            //                 this.result = "땡!";
+            //             }
+            //         }
+            //         this.nextWord = "";
+            //         this.$refs.inputString.focus();
+
+            //     }
+            // },
+        });
+    </script>
+    
+</body>
+</html>
